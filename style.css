@@ -147,6 +147,16 @@ button:hover {
   background: #454944;
 }
 
+.secondary-button {
+  border-color: var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+
+.secondary-button:hover {
+  background: #f1f2ee;
+}
+
 button:disabled {
   cursor: wait;
   opacity: 0.6;

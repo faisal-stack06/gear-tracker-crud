@@ -23,6 +23,7 @@
       </div>
 
       <form id="assetForm">
+        <input type="hidden" id="assetId" name="assetId">
         <div class="form-grid">
           <label for="item_name">
             Item name
@@ -53,6 +54,7 @@
 
         <div class="form-actions">
           <button type="submit" id="submitButton">Add asset</button>
+          <button type="button" id="cancelButton" class="secondary-button" hidden>Cancel edit</button>
           <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
         </div>
       </form>

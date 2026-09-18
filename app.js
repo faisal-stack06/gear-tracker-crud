@@ -5,12 +5,16 @@ const supabaseClient = window.supabase.createClient(supabaseProjectUrl, SUPABASE
 
 const assetForm = document.querySelector("#assetForm");
 const submitButton = document.querySelector("#submitButton");
+const cancelButton = document.querySelector("#cancelButton");
 const formMessage = document.querySelector("#formMessage");
+const assetsTable = document.querySelector("#assetsTable");
 
 assetForm.addEventListener("submit", (event) => {
   event.preventDefault();
   addAsset();
 });
+
+cancelButton.addEventListener("click", resetEditState);
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchAssets();
@@ -18,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function addAsset() {
   const formData = new FormData(assetForm);
+  const assetId = formData.get("assetId");
   const asset = {
     item_name: formData.get("item_name").trim(),
     category: formData.get("category").trim(),
@@ -28,28 +33,58 @@ async function addAsset() {
   setFormState({ message: "Saving asset...", type: "", disabled: true });
 
   try {
-    const { error } = await supabaseClient
-      .from("assets")
-      .insert(asset);
+    const query = assetId
+      ? supabaseClient.from("assets").update(asset).eq("id", assetId)
+      : supabaseClient.from("assets").insert(asset);
+    const { error } = await query;
 
     if (error) {
       setFormState({ message: `Unable to save asset: ${error.message}`, type: "error", disabled: false });
       return;
     }
 
-    assetForm.reset();
-    setFormState({ message: "Asset added successfully.", type: "success", disabled: false });
+    resetEditState();
+    setFormState({
+      message: assetId ? "Asset updated successfully." : "Asset added successfully.",
+      type: "success",
+      disabled: false
+    });
     fetchAssets();
   } catch (error) {
     setFormState({ message: `Unable to save asset: ${error.message}`, type: "error", disabled: false });
   }
 }
 
+function editAsset(event) {
+  const editButton = event.target.closest("[data-action=edit]");
+
+  if (!editButton) {
+    return;
+  }
+
+  document.querySelector("#assetId").value = editButton.dataset.id;
+  document.querySelector("#item_name").value = editButton.dataset.itemName;
+  document.querySelector("#category").value = editButton.dataset.category;
+  document.querySelector("#status").value = editButton.dataset.status;
+  document.querySelector("#destination").value = editButton.dataset.destination;
+  submitButton.textContent = "Update asset";
+  cancelButton.hidden = false;
+  setFormState({ message: "Editing selected asset.", type: "", disabled: false });
+  document.querySelector("#item_name").focus();
+}
+
+function resetEditState() {
+  assetForm.reset();
+  document.querySelector("#assetId").value = "";
+  submitButton.textContent = "Add asset";
+  cancelButton.hidden = true;
+}
+
 async function fetchAssets() {
   try {
     const { data, error } = await supabaseClient
       .from("assets")
-      .select("item_name, category, status, destination")
+      .select("id, item_name, category, status, destination")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -89,7 +124,17 @@ function renderAssets(assets, errorMessage = "") {
     });
 
     const actionCell = document.createElement("td");
-    actionCell.textContent = "-";
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.className = "edit-button";
+    editButton.dataset.action = "edit";
+    editButton.dataset.id = asset.id;
+    editButton.dataset.itemName = asset.item_name ?? "";
+    editButton.dataset.category = asset.category ?? "";
+    editButton.dataset.status = asset.status ?? "";
+    editButton.dataset.destination = asset.destination ?? "";
+    editButton.textContent = "Edit";
+    actionCell.append(editButton);
     row.append(actionCell);
     tableBody.append(row);
   });
@@ -105,6 +150,8 @@ function renderAssets(assets, errorMessage = "") {
     tableBody.append(errorRow);
   }
 }
+
+assetsTable.addEventListener("click", editAsset);
 
 function setFormState({ message, type, disabled }) {
   formMessage.textContent = message;
