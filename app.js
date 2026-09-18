@@ -85,6 +85,7 @@ async function fetchAssets() {
     const { data, error } = await supabaseClient
       .from("assets")
       .select("id, item_name, category, status, destination")
+      .eq("is_deleted", false)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -135,6 +136,15 @@ function renderAssets(assets, errorMessage = "") {
     editButton.dataset.destination = asset.destination ?? "";
     editButton.textContent = "Edit";
     actionCell.append(editButton);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "delete-button";
+    deleteButton.dataset.action = "delete";
+    deleteButton.dataset.id = asset.id;
+    deleteButton.textContent = "Delete";
+    actionCell.append(deleteButton);
+
     row.append(actionCell);
     tableBody.append(row);
   });
@@ -152,6 +162,38 @@ function renderAssets(assets, errorMessage = "") {
 }
 
 assetsTable.addEventListener("click", editAsset);
+assetsTable.addEventListener("click", (event) => {
+  const deleteButton = event.target.closest("[data-action=delete]");
+
+  if (deleteButton) {
+    deleteAsset(deleteButton.dataset.id);
+  }
+});
+
+async function deleteAsset(id) {
+  const confirmed = window.confirm("Delete this asset from the active registry?");
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    const { error } = await supabaseClient
+      .from("assets")
+      .update({ is_deleted: true })
+      .eq("id", id);
+
+    if (error) {
+      setFormState({ message: `Unable to delete asset: ${error.message}`, type: "error", disabled: false });
+      return;
+    }
+
+    setFormState({ message: "Asset deleted successfully.", type: "success", disabled: false });
+    fetchAssets();
+  } catch (error) {
+    setFormState({ message: `Unable to delete asset: ${error.message}`, type: "error", disabled: false });
+  }
+}
 
 function setFormState({ message, type, disabled }) {
   formMessage.textContent = message;

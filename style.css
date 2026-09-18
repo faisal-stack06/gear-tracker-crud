@@ -157,6 +157,16 @@ button:hover {
   background: #f1f2ee;
 }
 
+.delete-button {
+  margin-left: 8px;
+  border-color: #a83f34;
+  background: #a83f34;
+}
+
+.delete-button:hover {
+  background: #7f2f27;
+}
+
 button:disabled {
   cursor: wait;
   opacity: 0.6;
