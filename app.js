@@ -516,6 +516,19 @@ if (document.getElementById("assetForm")) {
   assetForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    const assetFormData = new FormData(assetForm);
+    const assetFields = [
+      assetFormData.get("item_name"),
+      assetFormData.get("category"),
+      assetFormData.get("status"),
+      assetFormData.get("destination")
+    ];
+
+    if (assetFields.some((field) => !String(field ?? "").trim()) || normalizeAssetStatus(assetFormData.get("status")) === "select status") {
+      alert("Please complete all asset fields before submitting.");
+      return;
+    }
+
     if (isSubmitting) {
       return;
     }
@@ -670,6 +683,18 @@ if (document.getElementById("eventForm")) {
 
   eventForm.addEventListener("submit", (event) => {
     event.preventDefault();
+
+    const eventFields = [
+      document.getElementById("eventName").value,
+      document.getElementById("eventLocation").value,
+      document.getElementById("startDate").value,
+      document.getElementById("endDate").value
+    ];
+
+    if (eventFields.some((field) => !String(field ?? "").trim())) {
+      alert("Please complete all event fields before submitting.");
+      return;
+    }
 
     if (isSubmitting) {
       return;
