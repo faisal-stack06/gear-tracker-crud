@@ -9,6 +9,7 @@ const cancelButton = document.querySelector("#cancelButton");
 const formMessage = document.querySelector("#formMessage");
 const assetsTable = document.querySelector("#assetsTable");
 const searchInput = document.querySelector("#searchInput");
+const printButton = document.querySelector("#printBtn");
 
 assetForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -16,6 +17,10 @@ assetForm.addEventListener("submit", (event) => {
 });
 
 cancelButton.addEventListener("click", resetEditState);
+
+printButton.addEventListener("click", () => {
+  window.print();
+});
 
 searchInput.addEventListener("keyup", () => {
   const searchText = searchInput.value.toLowerCase();
@@ -126,6 +131,9 @@ function renderAssets(assets, errorMessage = "") {
   columns.forEach((column) => {
     const headerCell = document.createElement("th");
     headerCell.scope = "col";
+    if (column === "Action") {
+      headerCell.className = "action-column";
+    }
     headerCell.textContent = column;
     headerRow.append(headerCell);
   });
@@ -142,6 +150,7 @@ function renderAssets(assets, errorMessage = "") {
     });
 
     const actionCell = document.createElement("td");
+    actionCell.className = "action-column";
     const editButton = document.createElement("button");
     editButton.type = "button";
     editButton.className = "edit-button";

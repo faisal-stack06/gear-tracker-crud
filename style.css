@@ -219,6 +219,19 @@ tbody tr:last-child td {
   border-bottom: 0;
 }
 
+@media print {
+  #assetForm,
+  #searchInput,
+  #printBtn,
+  .action-column {
+    display: none !important;
+  }
+
+  table {
+    width: 100%;
+  }
+}
+
 @media (max-width: 640px) {
   .page-shell {
     width: min(100% - 24px, 1120px);
