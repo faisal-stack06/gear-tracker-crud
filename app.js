@@ -8,6 +8,7 @@ const submitButton = document.querySelector("#submitButton");
 const cancelButton = document.querySelector("#cancelButton");
 const formMessage = document.querySelector("#formMessage");
 const assetsTable = document.querySelector("#assetsTable");
+const searchInput = document.querySelector("#searchInput");
 
 assetForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -15,6 +16,22 @@ assetForm.addEventListener("submit", (event) => {
 });
 
 cancelButton.addEventListener("click", resetEditState);
+
+searchInput.addEventListener("keyup", () => {
+  const searchText = searchInput.value.toLowerCase();
+  const rows = assetsTable.getElementsByTagName("tbody")[0].rows;
+
+  for (let index = 0; index < rows.length; index++) {
+    const itemName = rows[index].cells[0].textContent.toLowerCase();
+    const category = rows[index].cells[1].textContent.toLowerCase();
+
+    if (itemName.includes(searchText) || category.includes(searchText)) {
+      rows[index].style.display = "";
+    } else {
+      rows[index].style.display = "none";
+    }
+  }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchAssets();
