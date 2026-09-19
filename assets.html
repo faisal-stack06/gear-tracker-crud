@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registry</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="events.html">Events</a>
+    <button type="button" id="logoutBtn">Logout</button>
+  </nav>
+  <main class="page-shell">
+    <header class="page-header">
+      <p class="eyebrow">OPERATIONS / ASSET REGISTER</p>
+      <h1>Register Assets
+      </h1>
+      <p class="intro">Create a logistics asset record for the operations team.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="asset-form-title">
+      <div class="panel-heading">
+        <h2 id="asset-form-title">Asset details</h2>
+        <span class="required-note">All fields required</span>
+      </div>
+
+      <form id="assetForm">
+        <input type="hidden" id="assetId" name="assetId">
+        <div class="form-grid">
+          <label for="item_name">
+            Item name
+            <input id="item_name" name="item_name" type="text" autocomplete="off" pattern=".*\S.*" required>
+          </label>
+
+          <label for="category">
+            Category
+            <input id="category" name="category" type="text" autocomplete="off" pattern=".*\S.*" required>
+          </label>
+
+          <label for="status">
+            Status
+            <select id="status" name="status" required>
+              <option value="" selected disabled>Select status</option>
+              <option value="available">Available</option>
+              <option value="in_transit">In transit</option>
+              <option value="deployed">Deployed</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+          </label>
+
+          <label for="destination">
+            Destination
+            <input id="destination" name="destination" type="text" autocomplete="off" pattern=".*\S.*" required>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="submitButton">Add Asset</button>
+          <button type="button" id="cancelButton" class="secondary-button" hidden>Cancel edit</button>
+          <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel table-panel" aria-labelledby="assets-title">
+      <div class="panel-heading">
+        <h2 id="assets-title">Assets</h2>
+        <span class="table-note">New records will appear here</span>
+      </div>
+      <input type="text" id="searchInput" placeholder="Cari barang atau kategori...">
+      <div class="table-wrapper">
+        <table id="assetsTable"></table>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>

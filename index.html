@@ -3,76 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asset Register</title>
+  <title>Dashboard
+  </title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js" defer></script>
 </head>
 <body>
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="events.html">Events</a>
+    <button type="button" id="logoutBtn">Logout</button>
+  </nav>
   <main class="page-shell">
     <header class="page-header">
       <p class="eyebrow">OPERATIONS / ASSET REGISTER</p>
-      <h1>Registry</h1>
-      <p class="intro">Create a logistics asset record for the operations team.</p>
+      <h1>Dashboard</h1>
+      <section id="dashboardStats" class="stats-grid" aria-label="Dashboard statistics">
+        <article class="stat-card">
+          <span class="stat-label">Total Aset</span>
+          <strong id="totalAssetsStat" class="stat-value">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Aset Sedang Dipinjam</span>
+          <strong id="inTransitAssetsStat" class="stat-value">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Event Aktif</span>
+          <strong id="activeEventsStat" class="stat-value">0</strong>
+        </article>
+      </section>
     </header>
 
-    <section class="panel" aria-labelledby="asset-form-title">
+    <section class="panel table-panel" aria-labelledby="event-log-title">
       <div class="panel-heading">
-        <h2 id="asset-form-title">Asset details</h2>
-        <span class="required-note">All fields required</span>
+        <h2 id="event-log-title">Event Log</h2>
       </div>
-
-      <form id="assetForm">
-        <input type="hidden" id="assetId" name="assetId">
-        <div class="form-grid">
-          <label for="item_name">
-            Item name
-            <input id="item_name" name="item_name" type="text" autocomplete="off" required>
-          </label>
-
-          <label for="category">
-            Category
-            <input id="category" name="category" type="text" autocomplete="off" required>
-          </label>
-
-          <label for="status">
-            Status
-            <select id="status" name="status" required>
-              <option value="" selected disabled>Select status</option>
-              <option value="available">Available</option>
-              <option value="in_transit">In transit</option>
-              <option value="deployed">Deployed</option>
-              <option value="maintenance">Maintenance</option>
-            </select>
-          </label>
-
-          <label for="destination">
-            Destination
-            <input id="destination" name="destination" type="text" autocomplete="off" required>
-          </label>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" id="submitButton">Add asset</button>
-          <button type="button" id="cancelButton" class="secondary-button" hidden>Cancel edit</button>
-          <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
-        </div>
-      </form>
-    </section>
-
-    <section class="panel table-panel" aria-labelledby="assets-title">
-      <div class="panel-heading">
-        <h2 id="assets-title">Assets</h2>
-        <span class="table-note">New records will appear here</span>
-      </div>
-      <input type="text" id="searchInput" placeholder="Cari barang atau kategori...">
       <div class="table-wrapper">
-        <table id="assetsTable"></table>
-      </div>
-      <div style="padding: 1.5rem 1rem;">
-        <button type="button" id="printBtn">Print Report</button>
+        <table id="eventLogTable">
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </section>
   </main>
+  <div id="manifestModal" class="modal">
+    <div class="modal-content" id="printArea">
+      <h3>Event Manifest: <span id="manifestEventName"></span></h3>
+      <div class="manifest-table-wrapper">
+        <table style="width: 100%; text-align: left; margin-top: 1rem; border-collapse: collapse;" border="1">
+          <thead>
+            <tr>
+              <th style="padding: 0.5rem;">[ ] OUT</th>
+              <th style="padding: 0.5rem;">[ ] IN</th>
+              <th style="padding: 0.5rem;">Item Name</th>
+            </tr>
+          </thead>
+          <tbody id="manifestTableBody"></tbody>
+        </table>
+      </div>
+      <div class="no-print" style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+        <button type="button" id="printManifestBtn">Print Manifest</button>
+        <button type="button" id="closeManifestBtn" class="btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
 </body>
 </html>

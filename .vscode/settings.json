@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^python3 - <<'PY'\ntry:\n import esprima\n print\\('esprima available'\\)\n try:\n  esprima\\.parseScript\\(open\\('app\\.js'\\)\\.read\\(\\)\\)\n  print\\('parse ok'\\)\n except Exception as error:\n  print\\(type\\(error\\)\\.__name__, error\\)\nexcept Exception as error:\n print\\('esprima unavailable'\\)\nPY$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

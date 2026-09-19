@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registry</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="events.html">Events</a>
+    <button type="button" id="logoutBtn">Logout</button>
+  </nav>
+  <main class="page-shell">
+    <header class="page-header">
+      <p class="eyebrow">OPERATIONS / EVENT REGISTER</p>
+      <h1>Create Event</h1>
+      <p class="intro">Create an event and assign available assets.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="event-form-title">
+      <div class="panel-heading">
+        <h2 id="event-form-title">Create Event</h2>
+      </div>
+
+      <form id="eventForm">
+        <div class="form-grid">
+          <label for="eventName">
+            Event Name
+            <input id="eventName" name="eventName" type="text" pattern=".*\S.*" required>
+          </label>
+
+          <label for="eventLocation">
+            Location
+            <input id="eventLocation" name="eventLocation" type="text" pattern=".*\S.*" required>
+          </label>
+
+          <label for="startDate">
+            Start Date
+            <input id="startDate" name="startDate" type="date" required>
+          </label>
+
+          <label for="endDate">
+            End Date
+            <input id="endDate" name="endDate" type="date" required>
+          </label>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1.5rem;">
+          <button type="button" id="openModalBtn" class="btn-secondary">Select Assets</button>
+          <button type="submit">Create Event</button>
+        </div>
+
+        <div class="form-actions">
+          <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+  <div id="assetModal" class="modal">
+    <div class="modal-content">
+      <h3>Select Equipment</h3>
+      <div id="assetChecklist"></div>
+      <button type="button" id="closeModalBtn">Done</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>

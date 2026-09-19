@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registry</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="panel login-panel" aria-labelledby="login-title">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">OPERATIONS / ACCESS</p>
+          <h1 id="login-title">Registry</h1>
+        </div>
+      </div>
+      <form id="loginForm" class="login-form">
+        <div class="form-grid">
+          <label for="username">
+            Username
+            <input id="username" name="username" type="text" autocomplete="username" required>
+          </label>
+          <label for="password">
+            Password
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Login</button>
+          <p id="loginMessage" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const loginMessage = document.getElementById("loginMessage");
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (username === "admin" && password === "admin123") {
+        localStorage.setItem("isAdmin", "true");
+        window.location.href = "index.html";
+        return;
+      }
+
+      loginMessage.textContent = "Username atau password salah.";
+      loginMessage.className = "form-message error";
+    });
+  </script>
+</body>
+</html>
